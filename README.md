@@ -4,11 +4,11 @@
 ## Django project (with Django channels)
 
 ### run server in development
-> virtualenv -p python3 venv
-> source /venv/bin/activate
-> pip install -r requiremnts.txt
-> python /manage.py migrate
-> python /manage.py runserver
+> - virtualenv -p python3 venv
+> - source /venv/bin/activate
+> - pip install -r requiremnts.txt
+> - python /manage.py migrate
+> - python /manage.py runserver
 
 admin can create a group(all , admin created by default)
 users can joind a new group
@@ -33,10 +33,10 @@ authentication with JWT ( [dj_rest_auth](https://dj-rest-auth.readthedocs.io) )
 * refresh token ``` /api/auth/token/refresh/ ```
 
 ### Tokens
-##### use [jwt](https://dj-rest-auth.readthedocs.io) in server side
-> get AccessToken & RefreshToken when user logged in 
-get new AccessToken with RefreshToken every few minutes
-set Tokens in Cookie-HttpOnly **(javascript cat reach tokens for protect against XSS vulnerability)**
+### use [jwt](https://dj-rest-auth.readthedocs.io) in server side
+> - get AccessToken & RefreshToken when user logged in 
+> - get new AccessToken with RefreshToken every few minutes
+> - set Tokens in Cookie-HttpOnly **(javascript cat reach tokens for protect against XSS vulnerability)**
 
 ### Socket
 1. open a WebSocket for geting new Notifications (store notificatios in Localstorage) ``` ws://{host}/ws/notification/ ```
