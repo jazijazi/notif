@@ -1,0 +1,20 @@
+{% extends "notification/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="row mt-5">
+    <div class="col-12 bg-light p-4">
+
+        <h1>Create New Notification</h1>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <br>
+            <button type="submit" class="btn btn-success"> Create </button>
+        </form>
+
+    </div>
+</div>
+
+{% endblock content %}

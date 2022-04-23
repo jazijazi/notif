@@ -1,0 +1,71 @@
+{% extends "notification/base.html" %}
+
+{% block content %}
+
+<div class="row my-3">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body p-5 text-center">
+                <h2 class="text-black-50"> A Simple Django Site. Use Channels for Notification On WebSocket </h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <h1 class="text-center">Rooms</h1>
+</div>
+
+<div class="row mb-3 justify-content-center">
+    <div class="col-12 col-md-8">
+    
+    <ul class="list-group">
+        {% for group in groups %}
+        <li class="list-group-item d-flex justify-content-between align-items-center h2 p-3">
+            <a href="{% url 'addtogroup' group.name %}" class="link-info text-decoration-none"> <i class="bi bi-box-arrow-in-right"></i> Join {{ group.name }} group </a>
+            <span class="badge bg-primary rounded-pill" id="{{group.name}}">{{ group.num_active }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+
+<script>
+    var socket = new WebSocket(
+    'ws://' + window.location.host +
+    '/ws/notification/');
+
+    socket.onmessage = function(e) {
+        const message = JSON.parse(e.data);
+        console.log(message)
+        switch (message['type']) {
+            case "chat.notify":
+                //alert(message['notification']['title'] + '\n' + message['notification']['content']);
+                alertModalTitleDom.innerHTML = message['notification']['title'];
+                alertModalBodyDom.innerHTML = message['notification']['content'];
+                alertModal.show();
+
+                socket.send(JSON.stringify({'type': 'ack_message' , 'id' : message['notification']['id']}));
+                break;
+
+            case "group_change_active_num":
+                console.log(message['data']['group_name']);
+                console.log(message['data']['num']);
+                if (message['data']['group_name'] != 'all' && message['data']['group_name'] != 'admin'){
+                    document.querySelector(`#${message['data']['group_name']}`).innerHTML = message['data']['num'] ;
+                    break;
+                }
+        }
+        
+    }
+    socket.onclose = function(e) {
+        console.error('Socket closed unexpectedly');
+    };
+</script>
+
+{% endblock scripts %}
